@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Filosofía Griega — Del Arché a la Metafísica</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:        #04040e;
+  --bg2:       #080818;
+  --surface:   #0c0c22;
+  --border:    #1a1a3a;
+  --gold:      #f0c040;
+  --gold2:     #d4a020;
+  --cyan:      #00e5ff;
+  --purple:    #b44ffc;
+  --orange:    #ff6b35;
+  --green:     #39ff7a;
+  --red:       #ff4060;
+  --text:      #e8e0ff;
+  --muted:     #5a5580;
+  --dim:       #2a2850;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Rajdhani',sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ── CANVAS ─────────────────────────────────────────── */
+#particles{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.55;
+}
+
+/* ── HERO ───────────────────────────────────────────── */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:2rem 1.5rem;
+  z-index:1;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%,
+    #1a0f3a55 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-kicker{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.6rem;
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  color:var(--cyan);
+  margin-bottom:1.2rem;
+  animation:fadeUp 1s ease both;
+}
+.hero h1{
+  font-family:'Cinzel',serif;
+  font-size:clamp(2rem,8vw,4.5rem);
+  font-weight:900;
+  line-height:1.05;
+  letter-spacing:-0.01em;
+  background:linear-gradient(135deg, var(--gold) 0%, #fff8e0 40%, var(--gold2) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:fadeUp 1s 0.2s ease both;
+  text-shadow:none;
+}
+.hero-sub{
+  margin-top:1.2rem;
+  font-family:'Crimson Pro',serif;
+  font-size:1.15rem;
+  color:#a09ac0;
+  font-style:italic;
+  max-width:560px;
+  animation:fadeUp 1s 0.4s ease both;
+}
+.hero-greek{
+  margin-top:0.8rem;
+  font-family:'Cinzel',serif;
+  font-size:0.75rem;
+  letter-spacing:0.25em;
+  color:var(--gold2);
+  opacity:0.65;
+  animation:fadeUp 1s 0.6s ease both;
+}
+.scroll-hint{
+  margin-top:3rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.4rem;
+  animation:fadeUp 1s 1s ease both;
+  cursor:pointer;
+}
+.scroll-hint span{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.6rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.scroll-arrow{
+  width:24px;height:24px;
+  border-right:2px solid var(--gold);
+  border-bottom:2px solid var(--gold);
+  transform:rotate(45deg);
+  animation:bounce 1.5s infinite;
+  opacity:0.6;
+}
+
+/* ── MEANDER DIVIDER ─────────────────────────────────── */
+.meander{
+  width:100%;height:12px;
+  background:repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 4px,
+    var(--gold2) 4px, var(--gold2) 6px,
+    transparent 6px, transparent 10px,
+    var(--gold2) 10px, var(--gold2) 12px
+  );
+  opacity:0.18;
+  margin:0;
+}
+
+/* ── STICKY NAV ──────────────────────────────────────── */
+.nav-bar{
+  position:sticky;top:0;
+  z-index:200;
+  background:rgba(4,4,14,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0;
+}
+.nav-inner{
+  display:flex;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.nav-inner::-webkit-scrollbar{display:none;}
+.nav-tab{
+  display:flex;align-items:center;gap:0.45rem;
+  padding:0.75rem 0.9rem;
+  border:none;background:transparent;
+  cursor:pointer;
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.62rem;
+  font-weight:600;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-bottom:2px solid transparent;
+  transition:all 0.2s;
+  white-space:nowrap;
+  flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-tab .tab-num{
+  width:18px;height:18px;
+  border-radius:50%;
+  background:var(--dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;
+  transition:all 0.2s;
+}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{
+  color:var(--gold);
+  border-bottom-color:var(--gold);
+}
+.nav-tab.active .tab-num{
+  background:var(--gold);
+  color:#000;
+}
+.progress-bar{
+  height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--cyan));
+  width:0%;
+  transition:width 0.3s;
+}
+
+/* ── SECTION ─────────────────────────────────────────── */
+.chapter{
+  position:relative;
+  z-index:1;
+  padding:3rem 0 2rem;
+}
+.chapter-header{
+  padding:0 1.2rem 2rem;
+  display:flex;flex-direction:column;gap:0.5rem;
+  opacity:0;transform:translateY(30px);
+  transition:all 0.7s ease;
+}
+.chapter-header.visible{opacity:1;transform:none;}
+.ch-num{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.58rem;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+}
+.ch-era{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1.2rem,4vw,2rem);
+  font-weight:700;
+  line-height:1.1;
+}
+.ch-tagline{
+  font-family:'Crimson Pro',serif;
+  font-size:1rem;
+  font-style:italic;
+  color:#8880aa;
+  max-width:600px;
+}
+.ch-question{
+  margin-top:0.4rem;
+  display:inline-block;
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.72rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:0.3rem 0.8rem;
+  border-radius:2px;
+  border:1px solid currentColor;
+  width:fit-content;
+}
+
+/* chapter colors */
+.ch1 .ch-num, .ch1 .ch-question{color:var(--cyan);}
+.ch1 .ch-era{background:linear-gradient(135deg,var(--cyan),#00aacc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch2 .ch-num, .ch2 .ch-question{color:var(--orange);}
+.ch2 .ch-era{background:linear-gradient(135deg,var(--orange),#cc4400);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch3 .ch-num, .ch3 .ch-question{color:var(--purple);}
+.ch3 .ch-era{background:linear-gradient(135deg,var(--purple),#8822cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch4 .ch-num, .ch4 .ch-question{color:var(--red);}
+.ch4 .ch-era{background:linear-gradient(135deg,var(--red),#cc2040);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch5 .ch-num, .ch5 .ch-question{color:var(--green);}
+.ch5 .ch-era{background:linear-gradient(135deg,var(--green),#00cc55);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch6 .ch-num, .ch6 .ch-question{color:var(--gold);}
+.ch6 .ch-era{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch7 .ch-num, .ch7 .ch-question{color:#c8a0ff;}
+.ch7 .ch-era{background:linear-gradient(135deg,#c8a0ff,#9060d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* ── CONTEXT BOX ─────────────────────────────────────── */
+.context-box{
+  margin:0 1.2rem 2rem;
+  padding:1.2rem 1.4rem;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:4px;
+  position:relative;
+  overflow:hidden;
+  opacity:0;transform:translateY(20px);
+  transition:all 0.7s 0.1s ease;
+}
+.context-box.visible{opacity:1;transform:none;}
+.context-box::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:3px;
+}
+.ch1 .context-box::before{background:var(--cyan);}
+.ch2 .context-box::before{background:var(--orange);}
+.ch3 .context-box::before{background:var(--purple);}
+.ch4 .context-box::before{background:var(--red);}
+.ch5 .context-box::before{background:var(--green);}
+.ch6 .context-box::before{background:var(--gold);}
+.ch7 .context-box::before{background:#c8a0ff;}
+.context-label{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.56rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:0.6rem;
+}
+.context-text{
+  font-family:'Crimson Pro',serif;
+  font-size:1rem;
+  color:#b0a8cc;
+  line-height:1.7;
+}
+
+/* ── PHILOSOPHER CARDS ───────────────────────────────── */
+.cards-grid{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.phil-card{
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+  opacity:0;transform:translateX(-20px);
+  transition:all 0.6s ease;
+  background:var(--bg);
+}
+.phil-card.visible{opacity:1;transform:none;}
+.phil-card.open{background:var(--bg2);}
+
+.card-trigger{
+  display:flex;align-items:stretch;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  transition:background 0.15s;
+}
+.card-trigger:active{background:rgba(255,255,255,0.03);}
+
+.card-glyph{
+  width:56px;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;
+  background:rgba(255,255,255,0.03);
+  border-right:1px solid var(--border);
+}
+.card-main{
+  flex:1;
+  padding:1rem 1rem 1rem 1.1rem;
+  display:flex;flex-direction:column;gap:0.2rem;
+}
+.card-top{
+  display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;
+}
+.card-year{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.65rem;
+  font-weight:700;
+  letter-spacing:0.12em;
+}
+.card-badge{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.52rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  padding:0.1rem 0.5rem;
+  border-radius:2px;
+  border:1px solid currentColor;
+}
+.card-name{
+  font-family:'Cinzel',serif;
+  font-size:1.1rem;
+  font-weight:700;
+  color:var(--text);
+  line-height:1.2;
+}
+.card-concept{
+  font-family:'Crimson Pro',serif;
+  font-size:0.9rem;
+  font-style:italic;
+  color:#7870a0;
+}
+.card-arrow{
+  padding:1rem 1rem 1rem 0.5rem;
+  display:flex;align-items:center;
+  color:var(--muted);
+  font-size:0.8rem;
+  flex-shrink:0;
+  transition:transform 0.25s,color 0.2s;
+}
+.phil-card.open .card-arrow{transform:rotate(180deg);}
+
+/* expanded body */
+.card-body{
+  display:none;
+  padding:0 1.4rem 1.6rem 1.4rem;
+}
+.phil-card.open .card-body{display:block;}
+
+.body-section{
+  margin-bottom:1.2rem;
+}
+.body-section:last-child{margin-bottom:0;}
+.sec-label{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.56rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:0.5rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.body-text{
+  font-family:'Crimson Pro',serif;
+  font-size:0.98rem;
+  color:#b8b0d0;
+  line-height:1.75;
+}
+.highlight-box{
+  margin-top:0.8rem;
+  padding:0.9rem 1rem;
+  border-radius:4px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+}
+.highlight-box .hl-label{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.56rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  margin-bottom:0.4rem;
+}
+.highlight-box p{
+  font-family:'Crimson Pro',serif;
+  font-size:0.95rem;
+  font-style:italic;
+  line-height:1.65;
+}
+.concept-chips{
+  display:flex;flex-wrap:wrap;gap:0.4rem;
+  margin-top:0.8rem;
+}
+.chip{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  padding:0.25rem 0.65rem;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  color:#6a6490;
+}
+
+/* ── NEXO (connection) ───────────────────────────────── */
+.nexo{
+  margin:1rem 1.2rem;
+  padding:0.8rem 1rem;
+  border-radius:4px;
+  display:flex;align-items:flex-start;gap:0.7rem;
+  background:rgba(255,255,255,0.03);
+  border:1px dashed var(--border);
+  opacity:0;transform:translateY(10px);
+  transition:all 0.5s ease;
+}
+.nexo.visible{opacity:1;transform:none;}
+.nexo-icon{font-size:1.2rem;flex-shrink:0;margin-top:0.1rem;}
+.nexo-text{
+  font-family:'Crimson Pro',serif;
+  font-size:0.88rem;
+  font-style:italic;
+  color:#7870a0;
+  line-height:1.6;
+}
+.nexo-text strong{
+  font-style:normal;
+  font-weight:600;
+  color:#a098c0;
+}
+
+/* ── BATTLE CARD ─────────────────────────────────────── */
+.battle{
+  margin:0 0 1.5rem;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:0;
+  align-items:stretch;
+  opacity:0;transform:scale(0.95);
+  transition:all 0.7s ease;
+}
+.battle.visible{opacity:1;transform:none;}
+.battle-side{
+  padding:1.4rem 1rem;
+  display:flex;flex-direction:column;gap:0.5rem;
+  background:var(--surface);
+}
+.battle-side.left{border-right:none;}
+.battle-side.right{border-left:none;}
+.battle-name{
+  font-family:'Cinzel',serif;
+  font-size:1rem;
+  font-weight:700;
+}
+.battle-pos{
+  font-family:'Crimson Pro',serif;
+  font-size:0.88rem;
+  font-style:italic;
+  color:#8880aa;
+  line-height:1.55;
+}
+.battle-quote{
+  margin-top:0.4rem;
+  padding:0.6rem 0.8rem;
+  background:rgba(255,255,255,0.04);
+  border-radius:3px;
+  font-family:'Crimson Pro',serif;
+  font-size:0.85rem;
+  font-style:italic;
+  color:#a098c0;
+  line-height:1.55;
+}
+.vs-col{
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem 0.4rem;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  writing-mode:vertical-rl;
+}
+.vs-text{
+  font-family:'Cinzel',serif;
+  font-size:1.4rem;
+  font-weight:900;
+  color:var(--orange);
+  text-shadow:0 0 20px var(--orange);
+}
+.battle-resolution{
+  padding:1rem 1.2rem;
+  background:rgba(255,100,50,0.06);
+  border:1px solid rgba(255,100,50,0.2);
+  border-top:none;
+}
+.res-label{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.56rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:0.4rem;
+}
+.res-text{
+  font-family:'Crimson Pro',serif;
+  font-size:0.9rem;
+  color:#b0a0cc;
+  line-height:1.65;
+}
+
+/* ── IDEA DIAGRAM (Plato) ────────────────────────────── */
+.world-diagram{
+  margin:0 1.2rem 1.5rem;
+  opacity:0;transform:translateY(20px);
+  transition:all 0.7s 0.2s ease;
+}
+.world-diagram.visible{opacity:1;transform:none;}
+.wd-world{
+  padding:1.1rem 1.2rem;
+  border-radius:4px;
+  margin-bottom:0.4rem;
+}
+.wd-world.ideas{
+  background:rgba(240,192,64,0.08);
+  border:1px solid rgba(240,192,64,0.3);
+}
+.wd-world.sensible{
+  background:rgba(0,229,255,0.05);
+  border:1px solid rgba(0,229,255,0.2);
+}
+.wd-label{
+  font-family:'Cinzel',serif;
+  font-size:0.75rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  margin-bottom:0.4rem;
+}
+.wd-world.ideas .wd-label{color:var(--gold);}
+.wd-world.sensible .wd-label{color:var(--cyan);}
+.wd-text{
+  font-family:'Crimson Pro',serif;
+  font-size:0.9rem;
+  color:#a098c0;
+  line-height:1.6;
+}
+.wd-arrow{
+  text-align:center;
+  font-size:1.5rem;
+  color:var(--muted);
+  margin:0.1rem 0;
+}
+
+/* ── QUOTE BIG ───────────────────────────────────────── */
+.big-quote{
+  margin:0 0 1.5rem;
+  padding:1.8rem 1.4rem;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+  opacity:0;
+  transition:opacity 0.8s ease;
+}
+.big-quote.visible{opacity:1;}
+.big-quote::before{
+  content:'"';
+  position:absolute;top:-0.5rem;left:0.8rem;
+  font-family:'Cinzel',serif;
+  font-size:6rem;
+  font-weight:900;
+  opacity:0.06;
+  line-height:1;
+}
+.bq-text{
+  font-family:'Crimson Pro',serif;
+  font-size:1.2rem;
+  font-style:italic;
+  color:#c8c0e0;
+  line-height:1.7;
+  position:relative;
+}
+.bq-author{
+  margin-top:0.8rem;
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.62rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ── FINAL BANNER ────────────────────────────────────── */
+.final-banner{
+  padding:3rem 1.4rem;
+  text-align:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 100%,
+    rgba(240,192,64,0.08) 0%, transparent 70%);
+  border-top:1px solid var(--border);
+  position:relative;z-index:1;
+}
+.fb-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(1.1rem,4vw,1.8rem);
+  font-weight:700;
+  background:linear-gradient(135deg,var(--gold),#fff8e0,var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:1rem;
+}
+.fb-text{
+  font-family:'Crimson Pro',serif;
+  font-size:1rem;
+  color:#8880aa;
+  font-style:italic;
+  max-width:500px;
+  margin:0 auto 1.5rem;
+  line-height:1.7;
+}
+.fb-footer{
+  font-family:'Rajdhani',sans-serif;
+  font-size:0.58rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-top:1px solid var(--border);
+  padding-top:1.5rem;
+}
+
+/* ── KEYFRAMES ───────────────────────────────────────── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes bounce{
+  0%,100%{transform:rotate(45deg) translateY(0);}
+  50%{transform:rotate(45deg) translateY(5px);}
+}
+@keyframes glow{
+  0%,100%{text-shadow:0 0 10px currentColor;}
+  50%{text-shadow:0 0 25px currentColor,0 0 50px currentColor;}
+}
+@keyframes pulse-border{
+  0%,100%{border-color:rgba(240,192,64,0.3);}
+  50%{border-color:rgba(240,192,64,0.7);}
+}
+
+/* glow on active chapter tabs */
+.nav-tab.active{animation:none;}
+.ch1 .card-year,.ch1 .card-badge{color:var(--cyan);}
+.ch2 .card-year,.ch2 .card-badge{color:var(--orange);}
+.ch3 .card-year,.ch3 .card-badge{color:var(--purple);}
+.ch4 .card-year,.ch4 .card-badge{color:var(--red);}
+.ch5 .card-year,.ch5 .card-badge{color:var(--green);}
+.ch6 .card-year,.ch6 .card-badge{color:var(--gold);}
+.ch7 .card-year,.ch7 .card-badge{color:#c8a0ff;}
+
+/* stagger cards */
+.phil-card:nth-child(1){transition-delay:0s;}
+.phil-card:nth-child(2){transition-delay:0.1s;}
+.phil-card:nth-child(3){transition-delay:0.2s;}
+.phil-card:nth-child(4){transition-delay:0.3s;}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-kicker">Filosofía · 6.º Año · Esc. Amado Juri · 2026</div>
+  <h1>Del Arché<br>a la Metafísica</h1>
+  <p class="hero-sub">La asombrosa aventura del pensamiento griego: cómo los primeros filósofos transformaron la pregunta por el mundo en la pregunta por el ser.</p>
+  <div class="hero-greek">ΑΡΧ — ΛΟΓΟΣ — ΕΙΔΟΣ — ΟΥΣΙΑ</div>
+  <div class="scroll-hint" onclick="document.querySelector('.nav-bar').scrollIntoView({behavior:'smooth'})">
+    <span>Comenzar</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══ NAV ═══════════════════════════════════════════════ -->
+<nav class="nav-bar" id="mainNav">
+  <div class="nav-inner" id="navInner">
+    <button class="nav-tab active" data-ch="1" onclick="goChapter(1)">
+      <span class="tab-num">1</span>Los Miletos
+    </button>
+    <button class="nav-tab" data-ch="2" onclick="goChapter(2)">
+      <span class="tab-num">2</span>Fuego vs. Piedra
+    </button>
+    <button class="nav-tab" data-ch="3" onclick="goChapter(3)">
+      <span class="tab-num">3</span>Pluralistas
+    </button>
+    <button class="nav-tab" data-ch="4" onclick="goChapter(4)">
+      <span class="tab-num">4</span>Los Sofistas
+    </button>
+    <button class="nav-tab" data-ch="5" onclick="goChapter(5)">
+      <span class="tab-num">5</span>Sócrates
+    </button>
+    <button class="nav-tab" data-ch="6" onclick="goChapter(6)">
+      <span class="tab-num">6</span>Platón
+    </button>
+    <button class="nav-tab" data-ch="7" onclick="goChapter(7)">
+      <span class="tab-num">7</span>Aristóteles
+    </button>
+  </div>
+  <div class="progress-bar" id="progressBar"></div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 1 — Los Filósofos de Mileto
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch1" id="ch1">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo I · c. 624 – 546 a.C.</div>
+    <div class="ch-era">La Escuela de Mileto</div>
+    <div class="ch-tagline">Cuando los griegos dejaron de rezar y empezaron a preguntar.</div>
+    <div class="ch-question">Pregunta central: ¿De qué está hecho todo?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">⚡ Contexto histórico</div>
+    <div class="context-text">
+      Mileto es una ciudad-estado próspera en la costa jónica (hoy Turquía). Sus mercaderes viajan a Egipto, Babilonia y Persia, trayendo astronomía, geometría y conocimientos técnicos. En este caldo de cultivo multicultural surge algo radicalmente nuevo: tres pensadores que se atreven a explicar el mundo <em>sin recurrir a los dioses</em>. No dicen "Zeus hace llover" — preguntan por la causa física de la lluvia. Es el nacimiento de la filosofía occidental.
+    </div>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- TALES -->
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🌊</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 624 – 546 a.C.</span>
+            <span class="card-badge">Arché: Agua</span>
+          </div>
+          <div class="card-name">Tales de Mileto</div>
+          <div class="card-concept">"El principio de todas las cosas es el agua."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">Quién fue</div>
+          <div class="body-text">Tales es considerado el primer filósofo de la historia. Era también un matemático y astrónomo brillante: se dice que predijo un eclipse solar en el 585 a.C., dejando boquiabierta a Mileto. Aristóteles lo citará como el iniciador de la búsqueda del principio material de todas las cosas.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Su gran pregunta</div>
+          <div class="body-text">Tales pregunta: ¿qué es lo que subyace a todo lo que existe? ¿Cuál es la sustancia fundamental de la que están hechas todas las cosas? Su respuesta es el <strong>agua</strong> (en griego: <em>hydôr</em>). Pero atención: no se trata del agua del río. Es el <em>principio</em> o <em>arché</em> del que todo surge y al que todo vuelve.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">¿Por qué el agua?</div>
+          <div class="body-text">Tales observaba que la humedad es necesaria para toda vida; que los alimentos tienen jugos; que las semillas son húmedas. El calor mismo parece surgir y nutrirse de la humedad. Además, los egipcios describían el origen del mundo como las aguas primordiales del Nun. Tales transforma el mito en hipótesis filosófica.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--cyan);">💡 Por qué importa</div>
+          <p style="color:#90e8ff;">Es la primera vez en la historia que alguien intenta explicar la totalidad de la realidad desde un único principio racional y observable. No es "el mundo existe porque los dioses lo crearon", sino "¿cuál es la causa natural de todo?". Este gesto funda la ciencia y la filosofía.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Arché</span><span class="chip">Monismo</span><span class="chip">Naturalismo</span><span class="chip">Primer filósofo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANAXIMANDRO -->
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">∞</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 611 – 546 a.C.</span>
+            <span class="card-badge">Arché: Lo Indefinido</span>
+          </div>
+          <div class="card-name">Anaximandro</div>
+          <div class="card-concept">"El arché es el ápeiron: lo ilimitado, lo indefinido."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">El gran salto</div>
+          <div class="body-text">Discípulo de Tales, Anaximandro hace una pregunta más profunda: si el principio de todo es el agua, ¿de qué está hecha el agua? ¿No sería contradictorio que el principio de todas las cosas tuviera él mismo una naturaleza particular? El principio verdadero debe ser <em>indefinido</em>, no una cosa concreta.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">El ápeiron</div>
+          <div class="body-text">Propone el <strong>ápeiron</strong> (ἄπειρον): lo <em>ilimitado</em>, lo que no tiene límites ni cualidades determinadas. Es eterno, inmortal e indestructible. De él se separan los contrarios (caliente/frío, seco/húmedo) que forman el mundo. El mundo existe en tensión de opuestos, y cuando uno viola los límites del otro, debe "pagar la pena" —una visión casi moral de la naturaleza.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Algo más</div>
+          <div class="body-text">Anaximandro también elaboró el primer mapa del mundo conocido y postuló que los seres humanos descendían de animales acuáticos —¡una intuición proto-evolutiva! Veía la Tierra flotando libremente en el espacio, sin apoyo, por la igualdad de distancias en todas direcciones.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--cyan);">💡 Por qué importa</div>
+          <p style="color:#90e8ff;">El ápeiron es el primer concepto abstracto de la filosofía. Anaximandro se da cuenta de que el principio de todo no puede ser ninguna cosa concreta. Introduce la noción de que la realidad más profunda es inaccesible a los sentidos y sólo alcanzable por el pensamiento. Anticipa así toda la metafísica posterior.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Ápeiron</span><span class="chip">Abstracción</span><span class="chip">Contrarios</span><span class="chip">Injusticia cósmica</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANAXÍMENES -->
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">💨</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 585 – 525 a.C.</span>
+            <span class="card-badge">Arché: Aire</span>
+          </div>
+          <div class="card-name">Anaxímenes de Mileto</div>
+          <div class="card-concept">"El aire es el principio: condensado forma agua y tierra; rarificado, fuego."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">La síntesis</div>
+          <div class="body-text">Anaxímenes vuelve a un elemento concreto —el aire— pero incorpora el mecanismo explicativo que le faltaba a Tales: la <strong>condensación y rarefacción</strong>. El aire, al condensarse, forma niebla, luego agua, luego tierra y piedra. Al rarificarse, forma fuego. Con un solo principio y un solo mecanismo, Anaxímenes explica toda la variedad del mundo.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">El alma y el mundo</div>
+          <div class="body-text">Añade una analogía poética pero profunda: así como el alma —que es aire— nos mantiene cohesionados como personas, el aire abraza y sostiene al mundo entero. El microcosmos (el hombre) y el macrocosmos (el universo) tienen la misma estructura. Esta idea de correspondencia entre el ser humano y el cosmos recorrerá toda la filosofía griega.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--cyan);">💡 Por qué importa</div>
+          <p style="color:#90e8ff;">Anaxímenes introduce el mecanismo del cambio. No basta con decir "todo viene del agua": hay que explicar <em>cómo</em> y <em>por qué</em> se transforma. La búsqueda de mecanismos causales es el corazón de la ciencia. Aristóteles verá en él al más maduro de los miletos.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Condensación</span><span class="chip">Rarificación</span><span class="chip">Cambio cualitativo</span><span class="chip">Microcosmos/Macrocosmos</span>
+        </div>
+      </div>
+    </div>
+  </div><!-- /cards-grid -->
+
+  <div class="nexo">
+    <div class="nexo-icon">⚡</div>
+    <div class="nexo-text"><strong>Legado de los Miletos:</strong> Los tres demuestran que el mundo puede explicarse racionalmente, sin mitos. Pero surge un problema que ninguno resolvió: ¿cómo puede haber cambio si hay un único principio? ¿Cómo lo Uno se convierte en lo Múltiple? Esta pregunta partirá la filosofía griega en dos bandos rivales.</div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 2 — Heráclito vs. Parménides
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch2" id="ch2">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo II · c. 535 – 450 a.C.</div>
+    <div class="ch-era">El Gran Conflicto</div>
+    <div class="ch-tagline">¿El mundo cambia o permanece? El duelo filosófico más importante de la historia.</div>
+    <div class="ch-question">Pregunta central: ¿Qué es más real: el cambio o la permanencia?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">⚔️ El Escenario</div>
+    <div class="context-text">Dos filósofos, casi contemporáneos, llegan a conclusiones radicalmente opuestas observando el mismo mundo. Uno ve movimiento y contradicción por todas partes. El otro demuestra —con lógica pura— que el movimiento es imposible. Su conflicto definirá toda la filosofía posterior: Platón, Aristóteles, Kant y Hegel son intentos de resolver esta tensión.</div>
+  </div>
+
+  <div class="battle">
+    <div class="battle-side left" style="border:1px solid rgba(255,107,53,0.3);">
+      <div class="battle-name" style="color:var(--orange);">🔥 Heráclito</div>
+      <div class="battle-pos" style="color:#cc8060;">c. 535 – 475 a.C. · Éfeso<br>"El oscuro", filósofo del fuego y el logos</div>
+      <div class="battle-quote">"No es posible bañarse dos veces en el mismo río. Las aguas nuevas fluyen siempre sobre las que bañan a quienes se adentran en los mismos ríos."</div>
+      <div class="battle-pos" style="margin-top:0.6rem;">Tesis: <strong style="color:#cc8060;">TODO FLUYE</strong> (panta rhei). La realidad es cambio permanente. Lo que parece estable es una ilusión. La guerra, la tensión de contrarios, es el padre de todas las cosas. El logos (razón universal) gobierna el conflicto.</div>
+    </div>
+    <div class="vs-col"><span class="vs-text">VS</span></div>
+    <div class="battle-side right" style="border:1px solid rgba(0,229,255,0.3);">
+      <div class="battle-name" style="color:var(--cyan);">🗿 Parménides</div>
+      <div class="battle-pos" style="color:#6090cc;">c. 515 – 450 a.C. · Elea<br>"El Padre de la Metafísica", filósofo del Ser</div>
+      <div class="battle-quote">"El ser es, y el no-ser no es. Este es el único camino de investigación verdadero."</div>
+      <div class="battle-pos" style="margin-top:0.6rem;">Tesis: <strong style="color:#6090cc;">EL SER ES UNO E INMÓVIL</strong>. El cambio es imposible: algo no puede surgir del no-ser (de la nada, nada). El mundo de los sentidos es engañoso. Solo la razón puede alcanzar la verdad: el Ser eterno, único, inmóvil, esférico.</div>
+    </div>
+  </div>
+  <div class="battle-resolution">
+    <div class="res-label">⚖️ ¿Qué consecuencias tuvo este duelo?</div>
+    <div class="res-text">Parménides crea la <strong>lógica del Ser</strong> —el primer argumento deductivo riguroso de la filosofía. Pero tiene un costo brutal: niega el cambio, la pluralidad, el movimiento. El mundo de los sentidos queda descartado. Platón tomará partido: hay un mundo inmutable (las Ideas, heredando a Parménides) y un mundo cambiante (las cosas, heredando a Heráclito). Aristóteles intentará reconciliarlos con su teoría de la potencia y el acto.</div>
+  </div>
+
+  <div class="big-quote">
+    <div class="bq-text">"El camino hacia arriba y el camino hacia abajo son el mismo. El tiempo es un niño jugando; el reino es de un niño."</div>
+    <div class="bq-author">— Heráclito · Fragmentos</div>
+  </div>
+
+  <div class="nexo">
+    <div class="nexo-icon">🎯</div>
+    <div class="nexo-text"><strong>La paradoja de Zenón:</strong> Discípulo de Parménides, Zenón inventa las paradojas para defender al maestro. La más famosa: Aquiles jamás puede alcanzar a la tortuga —siempre hay una distancia que dividir. El movimiento, argumenta, es <em>lógicamente absurdo</em>. El pensamiento griego entra en crisis: los sentidos dicen una cosa, la razón otra. ¿A cuál creerle?</div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 3 — Los Pluralistas y Atomistas
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch3" id="ch3">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo III · c. 500 – 400 a.C.</div>
+    <div class="ch-era">Pluralistas y Atomistas</div>
+    <div class="ch-tagline">Respuestas creativas al duelo Heráclito-Parménides.</div>
+    <div class="ch-question">Pregunta central: ¿Cómo explicar el cambio sin negar la razón?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">🧩 La estrategia</div>
+    <div class="context-text">La crisis provocada por Parménides y Heráclito exige nuevas respuestas. Si el Ser es inmóvil y el cambio existe… ¿qué hacemos? Los pluralistas proponen que hay <em>muchos</em> principios inmutables: los cambios son solo reordenamientos de estos elementos eternos. Los atomistas dan el paso más radical: la realidad es un vacío infinito con partículas indivisibles que se combinan formando todo lo que existe.
+    </div>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- EMPÉDOCLES -->
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🌿</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 492 – 432 a.C.</span>
+            <span class="card-badge">4 Elementos</span>
+          </div>
+          <div class="card-name">Empédocles de Agrigento</div>
+          <div class="card-concept">"Todo está hecho de cuatro raíces: tierra, agua, fuego, aire."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">Los cuatro elementos</div>
+          <div class="body-text">Empédocles propone que existen cuatro elementos eternos e inmutables: tierra, agua, fuego y aire. Ninguno es más "principio" que otro. El cambio en el mundo no es que los elementos se transformen: es que se mezclan y separan en distintas proporciones. Un hueso es una parte de fuego, otra de agua, dos de tierra.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Amor y Odio</div>
+          <div class="body-text">¿Qué mueve a los elementos? Dos fuerzas cósmicas: el <strong>Amor</strong> (Philia) que une, y el <strong>Odio</strong> (Neikos) que separa. El universo oscila entre fases de mezcla total (esfera perfecta, dominada por el Amor) y separación total (dominada por el Odio). Vivimos en una fase intermedia. Esta idea de fuerzas opuestas que gobiernan el cosmos anticipa el yin-yang y la dialéctica hegeliana.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--purple);">💡 Influencia</div>
+          <p style="color:#c090ff;">Los cuatro elementos de Empédocles dominarán la medicina y la física occidental durante 2000 años. Hipócrates los convertirá en los "cuatro humores" del cuerpo. Aristóteles los adoptará. Solo en el siglo XVII la química moderna los reemplazará.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Cuatro elementos</span><span class="chip">Amor/Odio</span><span class="chip">Pluralismo</span><span class="chip">Mezcla y separación</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANAXÁGORAS -->
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🧠</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 500 – 428 a.C.</span>
+            <span class="card-badge">El Nous</span>
+          </div>
+          <div class="card-name">Anaxágoras de Clazómenas</div>
+          <div class="card-concept">"En el principio todo estaba mezclado. El Nous (Mente) puso orden al caos."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">Las semillas</div>
+          <div class="body-text">Anaxágoras propone que todo está en todo: en cada cosa hay "semillas" (homeomerías) de todas las demás. En el oro hay un poco de todas las otras sustancias. Lo que hace que algo sea oro es que predominan las semillas de oro. El cambio es predominio, no transformación real.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">El Nous — La Mente</div>
+          <div class="body-text">¿Qué puso en movimiento el universo? El <strong>Nous</strong> (νοῦς): la Mente cósmica, pura, sin mezcla con ningún elemento material. El Nous es lo único que no está mezclado con nada. Por eso puede conocer y ordenar todo. Inició el movimiento giratorio que creó el cosmos. Aristóteles criticará que el Nous no hace suficiente trabajo explicativo: es convocado solo cuando todo lo demás falla.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--purple);">💡 Importancia histórica</div>
+          <p style="color:#c090ff;">Anaxágoras fue el primer filósofo que vivió en Atenas. Fue amigo de Pericles y maestro de Sócrates. Fue acusado de impiedad por decir que el Sol era una piedra ardiente (no un dios) y tuvo que huir. El caso anticipa el juicio a Sócrates: Atenas puede ser democrática y ejecutar a sus mejores pensadores.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Nous</span><span class="chip">Homeomerías</span><span class="chip">Mente cósmica</span><span class="chip">Todo en todo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMÓCRITO -->
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">⚛️</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 460 – 370 a.C.</span>
+            <span class="card-badge">Átomos y Vacío</span>
+          </div>
+          <div class="card-name">Demócrito de Abdera</div>
+          <div class="card-concept">"Solo existen los átomos y el vacío. Todo lo demás es opinión."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">La teoría atómica</div>
+          <div class="body-text">Demócrito (junto a Leucipo) propone la solución más radical: la realidad está compuesta de partículas <em>indivisibles</em> (en griego: <em>a-tomos</em> = sin corte) que se mueven en el vacío. Los átomos son eternos, inmutables e indestructibles —satisfaciendo a Parménides. Pero hay muchos y se mueven —satisfaciendo a Heráclito. El cambio es solo reordenamiento de átomos.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Una física materialista</div>
+          <div class="body-text">Todo —incluso el alma y el fuego— está hecho de átomos. Los átomos del alma son los más lisos y esféricos (los mejores para el movimiento). No hay providencia, no hay Nous divino, no hay propósito cósmico. El universo es un sistema de átomos en movimiento determinista. El azar y la necesidad, no Dios, rigen el cosmos.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--purple);">💡 Profecía científica</div>
+          <p style="color:#c090ff;">El atomismo de Demócrito anticipó la física moderna con 2.400 años de adelanto. La tabla periódica de Mendeleiev, la mecánica cuántica, el modelo atómico de Bohr: todos son versiones del programa de Demócrito. Nietzsche lo llamó "el más grande de los presocráticos".</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Átomo</span><span class="chip">Vacío</span><span class="chip">Materialismo</span><span class="chip">Determinismo</span><span class="chip">Mecanicismo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nexo">
+    <div class="nexo-icon">🔭</div>
+    <div class="nexo-text"><strong>El límite de la filosofía natural:</strong> Los presocráticos explican el cosmos, pero evitan la pregunta por el ser humano. ¿Qué es el bien? ¿Qué es la justicia? ¿Cómo vivir? La filosofía de la naturaleza calla ante estas preguntas. Pronto llegan los sofistas, y con ellos, el escándalo.</div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 4 — Los Sofistas
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch4" id="ch4">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo IV · c. 480 – 380 a.C.</div>
+    <div class="ch-era">Los Sofistas</div>
+    <div class="ch-tagline">El hombre como medida de todas las cosas. El relativismo que sacudió Atenas.</div>
+    <div class="ch-question">Pregunta central: ¿Existe la verdad objetiva, o todo es relativo?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">🏛️ Contexto: La democracia ateniense</div>
+    <div class="context-text">El siglo V a.C. es el Siglo de Oro de Atenas. La democracia directa florece: los ciudadanos debaten y votan en la Asamblea. Para convencer a la Asamblea se necesita hablar bien —retórica. Los sofistas son los primeros profesores pagados de la historia: cobran por enseñar el arte de argumentar y persuadir. Y llegan de todas partes de Grecia, sin el prejuicio local de "lo que siempre se hizo así". Relativizan todo.
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">⚖️</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 490 – 420 a.C.</span>
+            <span class="card-badge">Relativismo</span>
+          </div>
+          <div class="card-name">Protágoras de Abdera</div>
+          <div class="card-concept">"El hombre es la medida de todas las cosas."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">El relativismo del conocimiento</div>
+          <div class="body-text">La frase completa es: "El hombre es la medida de todas las cosas: de las que son, en cuanto que son; de las que no son, en cuanto que no son." Si el viento te parece frío y a mí templado, ambos tenemos razón: el viento es frío <em>para ti</em> y templado <em>para mí</em>. No hay verdad absoluta, solo perspectivas individuales. No hay physis (naturaleza) objetiva, solo nomos (convención, costumbre) subjetiva.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Sobre los dioses</div>
+          <div class="body-text">Protágoras dice: "Acerca de los dioses no tengo posibilidad de saber si existen o no existen, ni cuál es su naturaleza. Son muchos los obstáculos para saberlo: la oscuridad del asunto y la brevedad de la vida humana." Es el primer texto agnóstico de la historia. Por eso fue acusado de impiedad y sus libros quemados en Atenas.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--red);">💡 El desafío a la filosofía</div>
+          <p style="color:#ff8090;">Si el hombre es la medida, no hay verdad universal. Pero entonces, ¿cómo podemos debatir, hacer leyes, buscar justicia? Este relativismo desafía la posibilidad misma de la filosofía. Sócrates y Platón dedicarán su vida a refutarlo.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Relativismo</span><span class="chip">Physis vs. Nomos</span><span class="chip">Agnosticismo</span><span class="chip">Retórica</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🌫️</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">c. 483 – 376 a.C.</span>
+            <span class="card-badge">Nihilismo</span>
+          </div>
+          <div class="card-name">Gorgias de Leontinos</div>
+          <div class="card-concept">"Nada existe. Si algo existiera, no podría conocerse. Si pudiera conocerse, no podría comunicarse."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">El nihilismo radical</div>
+          <div class="body-text">Gorgias lleva el relativismo al extremo. En su tratado "Sobre el no-ser", argumenta con lógica estricta tres tesis: (1) Nada existe. (2) Si algo existiera, no podríamos conocerlo —nuestras palabras no son las cosas. (3) Si pudiéramos conocerlo, no podríamos comunicarlo a otro: el lenguaje no transmite realidad, solo produce efectos en el oyente.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">La retórica como poder</div>
+          <div class="body-text">Si el lenguaje no puede decir verdad, ¿para qué sirve? Para <em>persuadir</em>. Gorgias es el maestro de la retórica, el arte del discurso eficaz. Compara la palabra con el medicamento: bien administrado cura; mal administrado mata. El orador hábil puede convencer de cualquier cosa. Es el primer teórico del poder del discurso —anticipando a Foucault y Baudrillard.</div>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Nihilismo</span><span class="chip">Retórica</span><span class="chip">Poder del discurso</span><span class="chip">Lenguaje</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nexo">
+    <div class="nexo-icon">🔑</div>
+    <div class="nexo-text"><strong>La crisis que preparó a Sócrates:</strong> Los sofistas son intelectualmente brillantes, pero su relativismo tiene un costo moral devastador. Si no hay verdad objetiva, tampoco hay justicia objetiva. Las leyes son puras convenciones del más fuerte. Sócrates verá en esto el mayor peligro para la ciudad —y pondrá su vida en juego para refutarlo.</div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 5 — SÓCRATES
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch5" id="ch5">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo V · 469 – 399 a.C.</div>
+    <div class="ch-era">Sócrates</div>
+    <div class="ch-tagline">El giro hacia el interior: de la naturaleza al ser humano.</div>
+    <div class="ch-question">Pregunta central: ¿Cómo debe vivir el ser humano?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">🦉 El giro socrático</div>
+    <div class="context-text">Sócrates produce la revolución más radical de la filosofía griega: abandona la pregunta por la naturaleza (¿de qué está hecho el mundo?) y pregunta por el ser humano (¿qué es la virtud, la justicia, el bien?). No escribe nada —toda su filosofía llega a nosotros a través de sus discípulos, sobre todo Platón. Su método: el diálogo. Su arma: la pregunta. Su sentencia de muerte: el pensamiento mismo.
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🤔</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">La Mayéutica</span>
+            <span class="card-badge">Método</span>
+          </div>
+          <div class="card-name">El Arte de Hacer Parir Ideas</div>
+          <div class="card-concept">"Solo sé que no sé nada." — Sócrates</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">Cómo funciona la mayéutica</div>
+          <div class="body-text">La madre de Sócrates era partera. Él decía practicar el mismo oficio, pero con ideas: ayudar al interlocutor a "dar a luz" la verdad que ya lleva dentro. El método tiene dos fases. La <strong>ironía</strong>: fingir ignorancia y hacer preguntas que revelan las contradicciones del interlocutor —destrucción de la falsa sabiduría. La <strong>mayéutica</strong>: mediante preguntas más profundas, conducir al interlocutor a descubrir la verdad por sí mismo.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Un ejemplo típico</div>
+          <div class="body-text">Sócrates se acerca a un general famoso por su valor. "¿Qué es el coraje?" El general responde: "Coraje es no huir de la batalla." Sócrates: "¿Y si un ejército retrocede estratégicamente para ganar ventaja?" El general queda confundido. Y así, Sócrates demuestra que no sabe definir lo que cree saber. El resultado: <em>aporia</em> (perplejidad). Pero la aporia es el comienzo del verdadero saber.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">El daimon y la misión</div>
+          <div class="body-text">El oráculo de Delfos declaró que nadie era más sabio que Sócrates. Él lo interpretó así: yo sé que no sé; los demás creen saber y no saben. Esa pequeña diferencia lo hace el más sabio. Por eso considera su misión es recorrer Atenas "como un tábano que pica al caballo del Estado para que no se adormezca".</div>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Mayéutica</span><span class="chip">Ironía socrática</span><span class="chip">Aporia</span><span class="chip">Autoconocimiento</span><span class="chip">Daimon</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">⚖️</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">399 a.C.</span>
+            <span class="card-badge">El Juicio</span>
+          </div>
+          <div class="card-name">La Muerte de Sócrates</div>
+          <div class="card-concept">"Una vida sin examen no merece ser vivida."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">Los cargos</div>
+          <div class="body-text">Sócrates es juzgado con 70 años. Los cargos: <em>impiedad</em> (no creer en los dioses de la ciudad, introducir nuevas divinidades) y <em>corrupción de la juventud</em>. El tribunal de 501 ciudadanos lo condena a muerte por 280 votos contra 221. Sus amigos preparan su huida; él la rechaza. La ley lo condena injustamente, pero la ley es la ley: obedecerla o romperla no depende de si nos favorece.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Por qué no huyó</div>
+          <div class="body-text">Sócrates argumenta en el <em>Critón</em> de Platón: las leyes de Atenas lo criaron, lo educaron, le dieron todo. Si huyera cuando no le convienen, sería como un hijo que obedece al padre solo cuando le es útil. La coherencia entre el pensamiento y la acción es la esencia del filósofo. Bebe la cicuta sin temblar, conversando sobre la inmortalidad del alma.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--green);">💡 El legado político</div>
+          <p style="color:#70ff90;">La muerte de Sócrates plantea la pregunta más urgente de la filosofía política: ¿puede una democracia matar a su mejor ciudadano? ¿Hay límites a la obediencia civil? Thoreau, Gandhi y Martin Luther King darán respuestas radicalmente distintas a Sócrates.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Juicio democrático</span><span class="chip">Obediencia civil</span><span class="chip">Coherencia filosófica</span><span class="chip">Inmortalidad del alma</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nexo">
+    <div class="nexo-icon">🏛️</div>
+    <div class="nexo-text"><strong>El legado socrático:</strong> Sócrates no resuelve los problemas que plantea: ¿qué es la virtud? ¿qué es la justicia? ¿qué es el bien? Pero hace algo más valioso: demuestra que estas preguntas <em>son posibles</em> y necesarias. Platón, su discípulo más brillante, se propone responderlas. Para eso tendrá que construir un mundo nuevo.
+    </div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 6 — PLATÓN
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch6" id="ch6">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo VI · 427 – 347 a.C.</div>
+    <div class="ch-era">Platón</div>
+    <div class="ch-tagline">El mundo de las Ideas: la solución más audaz de la filosofía.</div>
+    <div class="ch-question">Pregunta central: ¿Dónde está la verdadera realidad?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">🌟 La herencia</div>
+    <div class="context-text">Platón tenía 28 años cuando ejecutaron a Sócrates. El trauma lo marcó de por vida. Decidió consagrar su existencia a demostrar que la filosofía tenía razón y que Atenas se había equivocado. Funda la Academia —la primera institución de enseñanza superior del mundo occidental. Su solución al debate presocrático es brillante: existe un mundo inmutable (Parménides tenía razón) y un mundo de cambio (Heráclito tenía razón). Pero uno es <em>real</em> y el otro es <em>sombra</em>.
+    </div>
+  </div>
+
+  <div class="world-diagram">
+    <div class="wd-world ideas">
+      <div class="wd-label">✨ MUNDO DE LAS IDEAS (Cosmos Noetós)</div>
+      <div class="wd-text">Eterno · Inmutable · Perfecto · Solo accesible por la Razón<br>Aquí están la Idea de Belleza, la Idea de Justicia, la Idea de Bien (la más alta), la Idea de Caballo. Son los modelos perfectos de todo lo que existe.</div>
+    </div>
+    <div class="wd-arrow">↑ Ascenso (Razón / Filosofía) &nbsp;&nbsp;↓ Descenso (Sombra / Copia)</div>
+    <div class="wd-world sensible">
+      <div class="wd-label">🌊 MUNDO SENSIBLE (Cosmos Aisthetos)</div>
+      <div class="wd-text">Temporal · Cambiante · Imperfecto · Accesible por los Sentidos<br>Aquí están las flores, las personas bellas, los actos justos. Son copias imperfectas e impermanentes de las Ideas. Este es el mundo en que vivimos.</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🕯️</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">El Mito más famoso</span>
+            <span class="card-badge">La Caverna</span>
+          </div>
+          <div class="card-name">El Mito de la Caverna</div>
+          <div class="card-concept">"La República, Libro VII — La alegoría más poderosa de la filosofía."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">La escena</div>
+          <div class="body-text">Imaginá prisioneros encadenados desde la infancia en el fondo de una caverna. Solo pueden ver la pared del frente. Detrás de ellos, una fogata proyecta sombras de objetos que pasan. Para los prisioneros, esas sombras <em>son</em> la realidad. Uno de ellos logra liberarse, sale de la caverna y ve el sol. Al principio lo enceguece. Poco a poco, ve los objetos reales, luego el cielo, y finalmente el Sol mismo.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">La interpretación</div>
+          <div class="body-text">La caverna = el mundo de los sentidos. Las sombras = las apariencias en que vivimos. La fogata = el sol del mundo sensible. El prisionero liberado = el filósofo. El sol exterior = la Idea del Bien (el principio supremo). El filósofo que vuelve a la caverna para iluminar a los demás = Sócrates. Que no le crean y lo maten = el juicio a Sócrates.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">La implicación política</div>
+          <div class="body-text">Solo el filósofo —quien conoce la Idea del Bien— puede gobernar justamente. En La República, Platón propone el gobierno de los filósofos-reyes: quienes más saben deben gobernar. Es un ideal aristocrático del conocimiento, opuesto a la democracia que mató a Sócrates.</div>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Caverna</span><span class="chip">Idea del Bien</span><span class="chip">Anamnesis</span><span class="chip">Filósofo-Rey</span><span class="chip">Dualismo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🔮</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">La Teoría del Conocimiento</span>
+            <span class="card-badge">Anamnesis</span>
+          </div>
+          <div class="card-name">Conocer es Recordar</div>
+          <div class="card-concept">"El alma conoció las Ideas antes de nacer. Aprender es recordar."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">El alma inmortal</div>
+          <div class="body-text">Para Platón, el alma es inmortal y preexiste al cuerpo. Antes de nacer en un cuerpo, el alma habitó el mundo de las Ideas y las contempló directamente. Al nacer, "olvida" todo a causa del trauma del nacimiento. El aprendizaje no es adquirir información nueva: es <strong>anamnesis</strong>, re-cordación, recuperación de lo que el alma ya sabe pero olvidó.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">El esclavo geómetra</div>
+          <div class="body-text">En el diálogo Menón, Sócrates toma a un esclavo sin educación y, solo con preguntas, lo lleva a descubrir el teorema de Pitágoras. ¿Cómo lo sabe el esclavo si nunca lo estudió? Para Platón, la respuesta es la anamnesis: el alma del esclavo ya conocía la verdad matemática. El maestro solo la despertó.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:var(--gold);">💡 Relevancia actual</div>
+          <p style="color:#f0d070;">La anamnesis de Platón resuena en la lingüística de Chomsky: hay estructuras innatas del lenguaje que no se aprenden sino que se activan. Y en la psicología de Jung: los arquetipos del inconsciente colectivo son como Ideas platónicas del alma humana.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Anamnesis</span><span class="chip">Alma inmortal</span><span class="chip">Conocimiento a priori</span><span class="chip">Innatismo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="big-quote">
+    <div class="bq-text">"La filosofía es el mayor bien que le fue concedido a los mortales por obra de los dioses. Mediante ella el alma logra liberarse de las cadenas de la ignorancia y ascender hacia la luz de la verdad."</div>
+    <div class="bq-author">— Platón · Fedón</div>
+  </div>
+
+  <div class="nexo">
+    <div class="nexo-icon">⚡</div>
+    <div class="nexo-text"><strong>El problema del platonismo:</strong> La teoría de las Ideas resuelve el debate presocrático pero crea nuevos problemas. ¿Cómo se relacionan las Ideas con las cosas? ¿Hay una Idea de suciedad? ¿De error? Aristóteles, su mejor discípulo, pasará años atacando estas inconsistencias. La ruptura entre maestro y discípulo es la más fructífera de la historia de la filosofía.</div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══════════════════════════════════════════════════════
+  CAPÍTULO 7 — ARISTÓTELES
+════════════════════════════════════════════════════════ -->
+<section class="chapter ch7" id="ch7">
+  <div class="chapter-header">
+    <div class="ch-num">Capítulo VII · 384 – 322 a.C.</div>
+    <div class="ch-era">Aristóteles — La Metafísica</div>
+    <div class="ch-tagline">La forma está en las cosas, no en un cielo aparte. La filosofía baja a la tierra.</div>
+    <div class="ch-question">Pregunta central: ¿Qué es el ser en cuanto ser?</div>
+  </div>
+
+  <div class="context-box">
+    <div class="context-label">📚 El primer enciclopedista</div>
+    <div class="context-text">Aristóteles llega a la Academia de Platón a los 17 años y permanece 20 años. "Amicus Plato, sed magis amica veritas": Platón es mi amigo, pero la verdad lo es más. Funda su propia escuela, el Liceo. Sistematiza todo el saber de su época: lógica, ética, política, biología, física, retórica, poética, metafísica. Su método no es la dialéctica mística sino la observación empírica combinada con el análisis lógico. El mundo concreto, no el cielo de las Ideas, es el laboratorio del filósofo.</div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🌍</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">La gran ruptura</span>
+            <span class="card-badge">Crítica a Platón</span>
+          </div>
+          <div class="card-name">La Forma Está en las Cosas</div>
+          <div class="card-concept">"Amicus Plato, sed magis amica veritas." — Aristóteles</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">El problema del tercer hombre</div>
+          <div class="body-text">Aristóteles critica a Platón con un argumento demoledor —el "tercer hombre". Si el caballo real se explica por la Idea de Caballo, ¿qué explica la relación entre el caballo real y la Idea de Caballo? Se necesita una tercera entidad, y así al infinito. El mundo de las Ideas no explica nada: lo complica todo. Las Ideas son entidades innecesarias —Occam las llamará luego "navaja de Occam".</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">La forma inmanente</div>
+          <div class="body-text">Para Aristóteles, la forma (eidos) no existe separada de la materia. Existe <em>en</em> las cosas concretas. Un caballo es una unión de <strong>materia</strong> (carne, huesos, sangre) y <strong>forma</strong> (la estructura específica que lo hace ser caballo). No hay Idea de Caballo flotando en el cielo: hay caballos concretos, cada uno con su forma propia. La realidad es esta: individual, concreta, observable.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:#c8a0ff;">💡 El giro empirista</div>
+          <p style="color:#d0b0ff;">Aristóteles funda el empirismo: el conocimiento comienza con la experiencia sensible. No hay "recuerdo" de Ideas previas. Hay observación, abstracción, generalización. Este método será retomado por la ciencia moderna: Galileo, Newton, Darwin son aristotélicos en su método, no platónicos.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Forma inmanente</span><span class="chip">Materia</span><span class="chip">Empirismo</span><span class="chip">Tercer hombre</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">🔄</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">El Cambio Explicado</span>
+            <span class="card-badge">Potencia y Acto</span>
+          </div>
+          <div class="card-name">Potencia, Acto y las Cuatro Causas</div>
+          <div class="card-concept">"Todo ente está en potencia de ser lo que aún no es y en acto de ser lo que ya es."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">La solución al cambio</div>
+          <div class="body-text">Parménides dijo: el ser es y el no-ser no es —el cambio es imposible. Aristóteles responde con su distinción entre <strong>potencia</strong> (dýnamis) y <strong>acto</strong> (enérgeia). Una bellota no es un roble (en acto), pero es un roble en potencia. El cambio es el paso de la potencia al acto. Este tránsito no viola el principio de Parménides: nunca hay paso del no-ser al ser absoluto, sino del ser-en-potencia al ser-en-acto.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">Las Cuatro Causas</div>
+          <div class="body-text">Para explicar por qué algo es lo que es, Aristóteles identifica cuatro causas: (1) <strong>Causa material</strong>: de qué está hecho (el mármol de la estatua). (2) <strong>Causa formal</strong>: qué forma tiene (la forma de Hermes). (3) <strong>Causa eficiente</strong>: quién lo produjo (el escultor). (4) <strong>Causa final</strong>: para qué existe (adornar el templo). La causa final —el telos, el propósito— es la más importante: todo tiene un fin hacia el que tiende naturalmente.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">El Motor Inmóvil</div>
+          <div class="body-text">Si todo se mueve por una causa eficiente, ¿qué mueve al primer movedor? Debe existir un <strong>Motor Inmóvil</strong>: pura actualidad sin potencia, que mueve todo sin ser movido. No lo mueve empujando, sino atrayendo —como el amor mueve al amante hacia el amado. Es puro pensamiento que se piensa a sí mismo (noesis noeseos). Los teólogos medievales lo identificarán con Dios.</div>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Potencia y Acto</span><span class="chip">Cuatro causas</span><span class="chip">Telos</span><span class="chip">Motor Inmóvil</span><span class="chip">Teleología</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phil-card" data-card>
+      <div class="card-trigger" onclick="toggleCard(this)">
+        <div class="card-glyph">📖</div>
+        <div class="card-main">
+          <div class="card-top">
+            <span class="card-year">La ciencia del ser</span>
+            <span class="card-badge">Metafísica</span>
+          </div>
+          <div class="card-name">La Metafísica como Disciplina</div>
+          <div class="card-concept">"Hay una ciencia que estudia el ser en cuanto ser y los atributos que le pertenecen por sí mismo."</div>
+        </div>
+        <div class="card-arrow">▾</div>
+      </div>
+      <div class="card-body">
+        <div class="body-section">
+          <div class="sec-label">¿Qué es la metafísica?</div>
+          <div class="body-text">Aristóteles llama a esta ciencia "filosofía primera" o "sabiduría". El nombre <em>metafísica</em> (μετὰ τὰ φυσικά: "más allá de la física") lo pusieron sus editores al ordenar sus obras. Estudia el ser en cuanto ser: no el ser de las plantas (eso es la biología) ni el ser del número (eso es la matemática), sino lo que todo ente tiene en común por el solo hecho de ser ente.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">La sustancia</div>
+          <div class="body-text">El concepto central es la <strong>sustancia</strong> (ousia): lo que hace que algo sea lo que es, su identidad propia. La sustancia es el "qué es" de cada cosa. Aristóteles distingue la sustancia primera (este caballo particular, esta persona concreta) de la sustancia segunda (la especie: caballo, humano). Lo real, lo verdaderamente existente, son las sustancias particulares —no las Ideas generales de Platón.</div>
+        </div>
+        <div class="body-section">
+          <div class="sec-label">La ética: el fin del ser humano</div>
+          <div class="body-text">Si todo tiene un telos (fin natural), ¿cuál es el del ser humano? La <strong>eudaimonía</strong>: la felicidad como plenitud de las capacidades propias. No el placer, no la riqueza: la actividad del alma conforme a la virtud. Las virtudes se aprenden y practican: la virtud es el <em>hábito</em> de actuar bien. El ser humano es un <em>animal político</em> (zōon politikón): solo puede ser feliz en la polis, en comunidad.</div>
+        </div>
+        <div class="highlight-box">
+          <div class="hl-label" style="color:#c8a0ff;">💡 El cierre del círculo</div>
+          <p style="color:#d0b0ff;">Aristóteles cierra el recorrido iniciado por Tales. Los miletos preguntaron por el arché (principio material). Parménides preguntó por el ser puro. Platón ubicó la verdad en un mundo separado de Ideas. Aristóteles la devuelve a este mundo: la verdad está en las cosas concretas, en la naturaleza observable, en la vida humana en comunidad. La metafísica no es fuga del mundo: es su comprensión más profunda.</p>
+        </div>
+        <div class="concept-chips">
+          <span class="chip">Sustancia (Ousia)</span><span class="chip">Eudaimonía</span><span class="chip">Animal político</span><span class="chip">Virtud como hábito</span><span class="chip">Logos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="big-quote">
+    <div class="bq-text">"Todos los hombres tienen por naturaleza el deseo de saber. Una señal de ello es el amor a las sensaciones: pues estas son amadas por sí mismas, independientemente de su utilidad."</div>
+    <div class="bq-author">— Aristóteles · Metafísica, Libro I</div>
+  </div>
+</section>
+
+<div class="meander"></div>
+
+<!-- ══ FINAL ══════════════════════════════════════════════ -->
+<div class="final-banner">
+  <div class="fb-title">El arco completo del pensamiento griego</div>
+  <div class="fb-text">De Tales preguntando "¿de qué está hecho el agua?" a Aristóteles preguntando "¿qué es el ser en cuanto ser?": doscientos años de asombro radical transformaron para siempre la manera en que la humanidad se piensa a sí misma.</div>
+  <table style="margin:0 auto 1.5rem;border-collapse:collapse;width:100%;max-width:500px;">
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:var(--cyan);">Miletos</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿De qué está hecho el mundo?</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:var(--orange);">Heráclito/Parménides</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿Cambio o permanencia?</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:var(--purple);">Atomistas</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿Cuál es la unidad última?</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:var(--red);">Sofistas</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿Hay verdad objetiva?</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:var(--green);">Sócrates</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿Cómo debe vivir el hombre?</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:var(--gold);">Platón</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿Dónde está la verdadera realidad?</td>
+    </tr>
+    <tr>
+      <td style="padding:0.5rem 0.6rem;font-family:'Rajdhani',sans-serif;font-size:0.62rem;letter-spacing:0.1em;color:#c8a0ff;">Aristóteles</td>
+      <td style="padding:0.5rem 0.6rem;font-family:'Crimson Pro',serif;font-size:0.85rem;color:#8880aa;">¿Qué es el ser en cuanto ser?</td>
+    </tr>
+  </table>
+  <div class="fb-footer">
+    Prof. Julio Alberto Lazarte · Filosofía 6.º Año · Esc. Amado Juri · Tucumán, Argentina<br>
+    © 2026 — Uso educativo exclusivo
+  </div>
+</div>
+
+<script>
+// ── PARTICLES ───────────────────────────────────────────────
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+function createParticle() {
+  const colors = ['#f0c04040','#00e5ff30','#b44ffc25','#39ff7a20','#ff6b3520'];
+  return {
+    x: randomBetween(0, W),
+    y: randomBetween(0, H),
+    r: randomBetween(0.5, 2.5),
+    vx: randomBetween(-0.15, 0.15),
+    vy: randomBetween(-0.2, -0.05),
+    color: colors[Math.floor(Math.random() * colors.length)],
+    life: 1,
+    decay: randomBetween(0.0008, 0.002)
+  };
+}
+
+for (let i = 0; i < 120; i++) particles.push(createParticle());
+
+function animateParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach((p, i) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= p.decay;
+    if (p.life <= 0 || p.y < -5) particles[i] = createParticle();
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ── SCROLL REVEAL ────────────────────────────────────────────
+const revealEls = document.querySelectorAll(
+  '.chapter-header, .context-box, .phil-card, .nexo, .battle, .big-quote, .world-diagram'
+);
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+revealEls.forEach(el => io.observe(el));
+
+// ── TOGGLE CARD ──────────────────────────────────────────────
+function toggleCard(trigger) {
+  const card = trigger.parentElement;
+  const wasOpen = card.classList.contains('open');
+  // close all in same chapter
+  const chapter = card.closest('.chapter');
+  chapter.querySelectorAll('.phil-card.open').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+// ── CHAPTER NAV ──────────────────────────────────────────────
+function goChapter(n) {
+  const sec = document.getElementById('ch' + n);
+  if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// active tab on scroll
+const chapters = Array.from({length: 7}, (_, i) => document.getElementById('ch' + (i + 1)));
+const tabs = document.querySelectorAll('.nav-tab');
+
+const navIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      const n = id.replace('ch', '');
+      tabs.forEach(t => t.classList.remove('active'));
+      const active = document.querySelector(`.nav-tab[data-ch="${n}"]`);
+      if (active) {
+        active.classList.add('active');
+        active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+chapters.forEach(ch => { if (ch) navIO.observe(ch); });
+
+// progress bar
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+  document.getElementById('progressBar').style.width = (scrolled * 100) + '%';
+});
+</script>
+</body>
+</html>
