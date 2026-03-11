@@ -1,0 +1,15 @@
+{
+  "name": "Del Arché a la Metafísica",
+  "short_name": "Del Arché a la Metafísica",
+  "description": "Del Arché a la Metafísica — Filosofía 6º Año",
+  "start_url": "/time_line/",
+  "scope": "/time_line/",
+  "display": "standalone",
+  "background_color": "#080810",
+  "theme_color": "#080810",
+  "orientation": "portrait",
+  "lang": "es",
+"icons": [
+  { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+]
+}
