@@ -1,0 +1,25 @@
+# Ignorar archivos de Python compilados
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar entornos virtuales
+venv/
+.env/
+
+# Ignorar configuraciones locales
+*.log
+*.tmp
+
+# Ignorar archivos de datos grandes (Parquet, CSV, etc.)
+*.parquet
+*.csv
+
+# Ignorar notebooks de prueba
+*.ipynb_checkpoints/
+
+# Ignorar archivos del sistema
+.DS_Store
+Thumbs.db
+
+*.py
