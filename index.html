@@ -110,6 +110,66 @@ body{
   opacity:0.65;
   animation:fadeUp 1s 0.6s ease both;
 }
+/* ── Greek term popups ─────────────────────────── */
+.greek-term{
+  cursor:pointer;
+  border-bottom:1px dashed var(--gold2);
+  transition:color 0.2s, border-color 0.2s;
+}
+.greek-term:hover{
+  color:var(--gold);
+  border-bottom-color:var(--gold);
+}
+/* Modal overlay */
+.gk-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(4,4,14,0.82);
+  backdrop-filter:blur(4px);
+  z-index:9000;
+  align-items:center;
+  justify-content:center;
+}
+.gk-overlay.open{ display:flex; }
+.gk-box{
+  background:var(--surface);
+  border:1px solid var(--gold2);
+  border-radius:12px;
+  padding:2rem 2.4rem;
+  max-width:480px;
+  width:90%;
+  position:relative;
+  animation:fadeUp 0.25s ease both;
+}
+.gk-title{
+  font-family:'Cinzel',serif;
+  font-size:1.4rem;
+  color:var(--gold);
+  margin-bottom:0.25rem;
+}
+.gk-translit{
+  font-size:0.8rem;
+  color:var(--muted);
+  letter-spacing:0.1em;
+  margin-bottom:1rem;
+}
+.gk-body{
+  font-size:0.95rem;
+  line-height:1.7;
+  color:var(--text);
+}
+.gk-close{
+  position:absolute;
+  top:0.7rem; right:0.9rem;
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:1.3rem;
+  cursor:pointer;
+  line-height:1;
+}
+.gk-close:hover{ color:var(--gold); }
 .scroll-hint{
   margin-top:3rem;
   display:flex;flex-direction:column;align-items:center;gap:0.4rem;
@@ -709,7 +769,25 @@ body{
   <div class="hero-kicker">Filosofía · 6.º Año · Esc. Amado Juri · 2026</div>
   <h1>Del Arché<br>a la Metafísica</h1>
   <p class="hero-sub">La asombrosa aventura del pensamiento griego: cómo los primeros filósofos transformaron la pregunta por el mundo en la pregunta por el ser.</p>
-  <div class="hero-greek">ΑΡΧ — ΛΟΓΟΣ — ΕΙΔΟΣ — ΟΥΣΙΑ</div>
+  <div class="hero-greek">
+    <span class="greek-term" data-term="arch">ΑΡΧ</span>
+    <span> — </span>
+    <span class="greek-term" data-term="logos">ΛΟΓΟΣ</span>
+    <span> — </span>
+    <span class="greek-term" data-term="eidos">ΕΙΔΟΣ</span>
+    <span> — </span>
+    <span class="greek-term" data-term="ousia">ΟΥΣΙΑ</span>
+  </div>
+
+  <!-- Modal griego -->
+  <div class="gk-overlay" id="gkOverlay" onclick="gkClose(event)">
+    <div class="gk-box">
+      <button class="gk-close" onclick="gkClose()">✕</button>
+      <div class="gk-title" id="gkTitle"></div>
+      <div class="gk-translit" id="gkTranslit"></div>
+      <div class="gk-body" id="gkBody"></div>
+    </div>
+  </div>
   <div class="scroll-hint" onclick="document.querySelector('.nav-bar').scrollIntoView({behavior:'smooth'})">
     <span>Comenzar</span>
     <div class="scroll-arrow"></div>
@@ -1611,6 +1689,51 @@ const navIO = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 chapters.forEach(ch => { if (ch) navIO.observe(ch); });
+
+// ── Greek terms modal ──────────────────────────────────
+const gkData = {
+  arch: {
+    title: 'ΑΡΧ',
+    translit: 'Arché',
+    body: 'Significa <em>principio</em>, <em>origen</em> o <em>fundamento</em>. En filosofía griega, especialmente en los presocráticos, se usaba para designar el elemento primero del cual proviene todo lo existente. Para Tales era el <strong>agua</strong>, para Anaxímenes el <strong>aire</strong>, para Heráclito el <strong>fuego</strong>.'
+  },
+  logos: {
+    title: 'ΛΟΓΟΣ',
+    translit: 'Logos',
+    body: 'Literalmente <em>palabra</em>, <em>discurso</em> o <em>razón</em>. En la filosofía griega, especialmente en Heráclito y luego en el estoicismo, se refiere a la <strong>razón universal</strong> que ordena el cosmos. Más tarde, en el cristianismo, se tradujo como el <em>Verbo</em> (el Logos divino).'
+  },
+  eidos: {
+    title: 'ΕΙΔΟΣ',
+    translit: 'Eidos',
+    body: 'Significa <em>forma</em>, <em>aspecto</em> o <em>idea</em>. En Platón, el eidos es la <strong>Idea o Forma eterna e inmutable</strong> que constituye la verdadera realidad, en contraste con las cosas sensibles que son copias imperfectas de ella.'
+  },
+  ousia: {
+    title: 'ΟΥΣΙΑ',
+    translit: 'Ousía',
+    body: 'Significa <em>ser</em>, <em>esencia</em> o <em>sustancia</em>. En Aristóteles, la ousía es aquello que <strong>existe por sí mismo</strong> y constituye la realidad fundamental de los entes, lo que permanece más allá de los accidentes.'
+  }
+};
+
+document.querySelectorAll('.greek-term').forEach(el => {
+  el.addEventListener('click', () => {
+    const d = gkData[el.dataset.term];
+    if (!d) return;
+    document.getElementById('gkTitle').textContent = d.title;
+    document.getElementById('gkTranslit').textContent = d.translit;
+    document.getElementById('gkBody').innerHTML = d.body;
+    document.getElementById('gkOverlay').classList.add('open');
+  });
+});
+
+function gkClose(e) {
+  if (!e || e.target === document.getElementById('gkOverlay') || !e.target) {
+    document.getElementById('gkOverlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('gkOverlay').classList.remove('open');
+});
 
 // progress bar
 window.addEventListener('scroll', () => {
