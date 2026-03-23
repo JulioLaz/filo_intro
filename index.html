@@ -27,7 +27,7 @@
   --green:     #39ff7a;
   --red:       #ff4060;
   --text:      #e8e0ff;
-  --muted:     #5a5580;
+  --muted:     #aeaad2; 
   --dim:       #2a2850;
 }
 
@@ -113,12 +113,14 @@ body{
 /* ── Greek term popups ─────────────────────────── */
 .greek-term{
   cursor:pointer;
-  border-bottom:1px dashed var(--gold2);
+  border:1px solid var(--gold2);
   transition:color 0.2s, border-color 0.2s;
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 .greek-term:hover{
   color:var(--gold);
-  border-bottom-color:var(--gold);
+  border:2px solid var(--gold);
 }
 /* Modal overlay */
 .gk-overlay{
@@ -766,7 +768,7 @@ body{
 
 <!-- ══ HERO ══════════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero-kicker">Filosofía · 6.º Año · Esc. Amado Juri · 2026</div>
+  <div class="hero-kicker">Unidad I · Tema 3</div>
   <h1>Del Arché<br>a la Metafísica</h1>
   <p class="hero-sub">La asombrosa aventura del pensamiento griego: cómo los primeros filósofos transformaron la pregunta por el mundo en la pregunta por el ser.</p>
   <div class="hero-greek">
